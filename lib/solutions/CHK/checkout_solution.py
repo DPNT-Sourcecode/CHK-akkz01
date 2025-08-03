@@ -15,7 +15,8 @@ class CheckoutSolution:
             'A': 50,
             'B': 30,
             'C': 20,
-            'D': 15
+            'D': 15,
+            'E': 40
         }
         total = 0 
 
@@ -35,10 +36,14 @@ class CheckoutSolution:
         else:
             total += sku_count['B'] * prices['B']
 
+        if sku_count['E'] >= 2:
+            total += (sku_count['B'])
+
         total += sku_count['C'] * prices['C']
         total += sku_count['D'] * prices['D']   
 
         return total 
+
 
 
 
