@@ -112,22 +112,33 @@ class CheckoutSolution:
         total += (v_qty % 2) * prices['V']
 
         # Handle STXYZ discounts 
-        for sku in ('S', 'T', 'X', 'Y', 'Z'):
-            if sku in sku_count:
-                sku_count[sku] = max(0, sku_count[sku])
-        # Calculate total for S, T, X, Y, Z
-        total += sku_count['S'] * prices['S']
-        total += sku_count['T'] * prices['T']
-        total += sku_count['X'] * prices['X']
-        total += sku_count['Y'] * prices['Y']
-        total += sku_count['Z'] * prices['Z']
-        # Apply STXYZ offer: 3 for 45
-        stxyz_total = (sku_count['S'] + sku_count['T'] + sku_count['X'] + sku_count['Y'] + sku_count['Z'])
-        if stxyz_total >= 3:
-            total += (stxyz_total // 3) * 45
-            stxyz_total %= 3
-            total += (stxyz_total % 3) * prices['S']  # Add remaining items at full price
+        grouped_skus = ['S', 'T', 'X', 'Y', 'Z']
+        grouped_sku_prices = {
+            'S': 20,
+            'T': 20,
+            'X': 17,
+            'Y': 20,
+            'Z': 21
+        }
+        grouped_sku_count = {sku: sku_count[sku] for sku in grouped_skus}
+        total_group_count = sum(grouped_sku_count.values())
+        grouped_discounted_sets = total_group_count // 3
+        total += grouped_discounted_sets * 45  # 3 for 45 offer
 
+        # Removed remaining grouped skus from total after applying offer 
+        # Take out the most expensive sku firt 
+        sorted_skus = sorted(grouped_skus, key=lambda sku: -grouped_sku_prices[sku])
+        sku_to_remove = grouped_discounted_sets * 3
+        for sku in sorted_skus:
+            remove = min(sku_to_remove, grouped_sku_count[sku])
+            sku_count[sku] -= remove
+            sku_to_remove -= remove
+            if sku_to_remove <= 0:
+                break
+
+        # Add remaining grouped skus to total
+        for sku in grouped_skus:
+            total += sku_count[sku] * grouped_sku_prices[sku]
 
         # SKUs with no offers
         total += sku_count['C'] * prices['C']
@@ -144,3 +155,4 @@ class CheckoutSolution:
         total += sku_count['W'] * prices['W']
 
         return total
+
