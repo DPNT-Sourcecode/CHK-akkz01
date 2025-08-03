@@ -93,9 +93,9 @@ class CheckoutSolution:
         total += (effective_q % 3) * prices['Q']
 
         # Handle Q discounts
-        q_qty = sku_count['Q']
-        total += (q_qty // 3) * 80
-        total += (q_qty % 3) * prices['Q']
+        #q_qty = sku_count['Q']
+        #total += (q_qty // 3) * 80
+        #total += (q_qty % 3) * prices['Q']
 
         # Handle U discounts
         u_qty = sku_count['U']
@@ -117,3 +117,4 @@ class CheckoutSolution:
         total += sku_count['E'] * prices['E']
 
         return total
+
