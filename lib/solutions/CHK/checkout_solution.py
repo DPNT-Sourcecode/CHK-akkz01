@@ -111,6 +111,15 @@ class CheckoutSolution:
         total += (v_qty // 2) * 90
         total += (v_qty % 2) * prices['V']
 
+        # Handle STXYZ discounts 
+        stxyz_sku = ['S', 'T', 'X', 'Y', 'Z']
+        stxyz_qty = sum(sku_count[sku] for sku in stxyz_sku)
+        if stxyz_qty >= 3:
+            total += (stxyz_qty // 3) * 45
+            stxyz_qty %= 3
+        total += stxyz_qty * prices['S']  # S, T, X,
+
+
         # SKUs with no offers
         total += sku_count['C'] * prices['C']
         total += sku_count['D'] * prices['D']
@@ -122,9 +131,16 @@ class CheckoutSolution:
         total += sku_count['N'] * prices['N']
         total += sku_count['O'] * prices['O']
         total += sku_count['R'] * prices['R']
+        total += sku_count['S'] * prices['S']
+        total += sku_count['T'] * prices['T']
+        total += sku_count['U'] * prices['U']
         total += sku_count['W'] * prices['W']
+        total += sku_count['X'] * prices['X']
+        total += sku_count['Y'] * prices['Y']
+        total += sku_count['Z'] * prices['Z']
 
         return total
+
 
 
 
