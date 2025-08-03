@@ -7,6 +7,10 @@ class CheckoutSolution:
         if not isinstance(skus, str):
             return -1 #Illegal Input 
         
+        valid_skus = set('ABCD')
+        if any(c not in valid_skus for c in skus):
+            return -1
+        
         prices = {
             'A': 50,
             'B': 30,
@@ -35,6 +39,7 @@ class CheckoutSolution:
         total += sku_count['D'] * prices['D']   
 
         return total 
+
 
 
 
