@@ -122,13 +122,9 @@ class CheckoutSolution:
         total += sku_count['N'] * prices['N']
         total += sku_count['O'] * prices['O']
         total += sku_count['R'] * prices['R']
-        total += sku_count['S'] * prices['S']
-        total += sku_count['T'] * prices['T']
         total += sku_count['W'] * prices['W']
-        total += sku_count['X'] * prices['X']
-        total += sku_count['Y'] * prices['Y']
-        total += sku_count['Z'] * prices['Z']
 
         return total
+
 
 
