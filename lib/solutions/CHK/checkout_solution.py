@@ -33,10 +33,10 @@ class CheckoutSolution:
         else:
             total += sku_count['A'] * prices['A']
         
-        #if sku_count['B'] >= 2:
-         #   total += (sku_count['B'] // 2) * 45 + (sku_count['B'] % 2) * prices['B']
-        #else:
-         #   total += sku_count['B'] * prices['B']
+        if sku_count['B'] >= 2:
+           total += (sku_count['B'] // 2) * 45 + (sku_count['B'] % 2) * prices['B']
+        else:
+           total += sku_count['B'] * prices['B']
 
         # Always add price for E
         total += sku_count['E'] * prices['E']
@@ -51,5 +51,6 @@ class CheckoutSolution:
         total += sku_count['D'] * prices['D']   
 
         return total 
+
 
 
