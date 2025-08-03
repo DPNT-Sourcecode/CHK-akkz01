@@ -35,8 +35,9 @@ class CheckoutSolution:
         effective_b = max(0, sku_count['B'] - free_b)
 
         # Apply F free F offer: For every 2 F, get one F free
-        free_f = sku_count['F'] // 2
-        effective_b = max(0, sku_count['F'] - free_f)
+        free_f = sku_count['F'] // 3
+        effective_f = max(0, sku_count['F'] - free_f)
+        total += effective_f * prices['F']
 
         # Apply B discount: 2 for 45
         total += (effective_b // 2) * 45
@@ -48,6 +49,7 @@ class CheckoutSolution:
         total += sku_count['E'] * prices['E']
 
         return total
+
 
 
 
