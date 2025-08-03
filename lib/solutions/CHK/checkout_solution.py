@@ -34,4 +34,7 @@ class CheckoutSolution:
         total += sku_count['C'] * prices['C']
         total += sku_count['D'] * prices['D']   
 
+        return total 
+
+
 
