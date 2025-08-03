@@ -6,5 +6,3 @@ class SumSolution:
             return x + y
         else:
             raise ValueError("Both inputs must be intergers")
-
-
