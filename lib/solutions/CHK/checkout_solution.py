@@ -144,9 +144,3 @@ class CheckoutSolution:
         total += sku_count['W'] * prices['W']
 
         return total
-
-
-
-
-
-
