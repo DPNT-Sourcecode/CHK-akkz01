@@ -28,6 +28,8 @@ class CheckoutSolution:
         # Apply this week's discounts 
         if sku_count['A'] >= 3:
             total += (sku_count['A'] // 3) * 130 + (sku_count['A'] % 3) * prices['A']
+        elif sku_count['A'] >= 5:
+            total += (sku_count['A'] // 5) * 200 + (sku_count['A'] % 5) * prices['A']
         else:
             total += sku_count['A'] * prices['A']
         
@@ -49,4 +51,5 @@ class CheckoutSolution:
         total += sku_count['D'] * prices['D']   
 
         return total 
+
 
