@@ -114,10 +114,12 @@ class CheckoutSolution:
         # C and D have no offers
         total += sku_count['C'] * prices['C']
         total += sku_count['D'] * prices['D']
+        total += sku_count['E'] * prices['E']
         total += sku_count['G'] * prices['G']
         total += sku_count['I'] * prices['I']
         total += sku_count['J'] * prices['J']
         total += sku_count['L'] * prices['L']
+        total += sku_count['N'] * prices['N']
         total += sku_count['O'] * prices['O']
         total += sku_count['R'] * prices['R']
         total += sku_count['S'] * prices['S']
@@ -128,3 +130,4 @@ class CheckoutSolution:
         total += sku_count['Z'] * prices['Z']
 
         return total
+
