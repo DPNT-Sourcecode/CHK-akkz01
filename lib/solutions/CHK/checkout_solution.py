@@ -1,12 +1,11 @@
+from collections import Counter
 
 class CheckoutSolution:
-
-    # skus = unicode string
     def checkout(self, skus):
         if not isinstance(skus, str):
-            return -1  # Illegal input
-
-        # Valid items and prices
+            return -1
+        
+        # Item prices
         prices = {
             'A': 50, 'B': 30, 'C': 20, 'D': 15, 'E': 40, 'F': 10,
             'G': 20, 'H': 10, 'I': 35, 'J': 60, 'K': 70, 'L': 90,
@@ -15,103 +14,104 @@ class CheckoutSolution:
             'Y': 20, 'Z': 21
         }
 
-        valid_skus = set(prices.keys())
-        if any(c not in valid_skus for c in skus):
+        # Validate input
+        if any(c not in prices for c in skus):
             return -1
-        
-        from collections import Counter
-        sku_count = Counter(skus)
+
+        count = Counter(skus)
         total = 0
 
-        # --------- Apply Free Item Offers ---------
+        # --- Apply free item promotions ---
+        # 2E -> get one B free
+        free_b = count['E'] // 2
+        count['B'] = max(0, count['B'] - free_b)
 
-        # E => get one B free for every two E
-        free_b = sku_count['E'] // 2
-        sku_count['B'] = max(0, sku_count['B'] - free_b)
+        # 3N -> get one M free
+        free_m = count['N'] // 3
+        count['M'] = max(0, count['M'] - free_m)
 
-        # N => get one M free for every three N
-        free_m = sku_count['N'] // 3
-        sku_count['M'] = max(0, sku_count['M'] - free_m)
+        # 3R -> get one Q free
+        free_q = count['R'] // 3
+        count['Q'] = max(0, count['Q'] - free_q)
 
-        # R => get one Q free for every three R
-        free_q = sku_count['R'] // 3
-        sku_count['Q'] = max(0, sku_count['Q'] - free_q)
+        # F: 2 get 1 free (so for every 3 Fs, pay for 2)
+        if count['F'] >= 3:
+            num_free = count['F'] // 3
+            count['F'] -= num_free
 
-        # F => get one F free for every two Fs (i.e., for every 3 Fs, pay for 2)
-        f_qty = sku_count['F']
-        free_f = f_qty // 3
-        sku_count['F'] = f_qty - free_f
+        # U: 3 get 1 free (so for every 4 Us, pay for 3)
+        if count['U'] >= 4:
+            num_free = count['U'] // 4
+            count['U'] -= num_free
 
-        # U => get one U free for every 3 Us (i.e., for every 4 Us, pay for 3)
-        u_qty = sku_count['U']
-        free_u = u_qty // 4
-        sku_count['U'] = u_qty - free_u
-
-        # --------- Group Discount (STXYZ) ---------
-
+        # --- Apply group discounts: STXYZ any 3 for 45 ---
         group_items = ['S', 'T', 'X', 'Y', 'Z']
-        group_price = 45
-        group_counter = [(item, prices[item]) for item in group_items]
-        total_group_items = sum(sku_count[item] for item in group_items)
-        num_groups = total_group_items // 3
+        group_prices = {k: prices[k] for k in group_items}
 
-        for _ in range(num_groups):
-            selected = []
-            # pick 3 most expensive items
-            for item, _ in sorted(group_counter, key=lambda x: -x[1]):
-                while sku_count[item] > 0 and len(selected) < 3:
-                    selected.append(item)
-                    sku_count[item] -= 1
-            total += group_price
+        # Create a sorted list of (item, price) in descending order
+        group_sorted = sorted(group_prices.items(), key=lambda x: -x[1])
+        group_total_items = sum(count[i] for i in group_items)
+        group_sets = group_total_items // 3
 
-        # --------- Apply Multibuy Offers ---------
+        for _ in range(group_sets):
+            picked = 0
+            for item, _ in group_sorted:
+                while count[item] > 0 and picked < 3:
+                    count[item] -= 1
+                    picked += 1
+                    if picked == 3:
+                        break
+            total += 45
+
+        # --- Multibuy offers ---
 
         # A: 5 for 200, 3 for 130
-        a_qty = sku_count['A']
-        total += (a_qty // 5) * 200
-        a_qty %= 5
-        total += (a_qty // 3) * 130
-        total += (a_qty % 3) * prices['A']
+        q = count['A']
+        total += (q // 5) * 200
+        q %= 5
+        total += (q // 3) * 130
+        total += (q % 3) * prices['A']
 
-        # B already handled above (2 for 45)
-        b_qty = sku_count['B']
-        total += (b_qty // 2) * 45
-        total += (b_qty % 2) * prices['B']
+        # B: 2 for 45
+        q = count['B']
+        total += (q // 2) * 45
+        total += (q % 2) * prices['B']
 
         # H: 10 for 80, 5 for 45
-        h_qty = sku_count['H']
-        total += (h_qty // 10) * 80
-        h_qty %= 10
-        total += (h_qty // 5) * 45
-        total += (h_qty % 5) * prices['H']
+        q = count['H']
+        total += (q // 10) * 80
+        q %= 10
+        total += (q // 5) * 45
+        total += (q % 5) * prices['H']
 
-        # K: 2 for 150
-        k_qty = sku_count['K']
-        total += (k_qty // 2) * 150
-        total += (k_qty % 2) * prices['K']
+        # K: 2 for 120
+        q = count['K']
+        total += (q // 2) * 120
+        total += (q % 2) * prices['K']
 
         # P: 5 for 200
-        p_qty = sku_count['P']
-        total += (p_qty // 5) * 200
-        total += (p_qty % 5) * prices['P']
+        q = count['P']
+        total += (q // 5) * 200
+        total += (q % 5) * prices['P']
 
         # Q: 3 for 80
-        q_qty = sku_count['Q']
-        total += (q_qty // 3) * 80
-        total += (q_qty % 3) * prices['Q']
+        q = count['Q']
+        total += (q // 3) * 80
+        total += (q % 3) * prices['Q']
 
         # V: 3 for 130, 2 for 90
-        v_qty = sku_count['V']
-        total += (v_qty // 3) * 130
-        v_qty %= 3
-        total += (v_qty // 2) * 90
-        total += (v_qty % 2) * prices['V']
+        q = count['V']
+        total += (q // 3) * 130
+        q %= 3
+        total += (q // 2) * 90
+        total += (q % 2) * prices['V']
 
-        # --------- Add Remaining Items ---------
+        # --- Remaining items with no special offer ---
         for item in prices:
-            if item in ['A','B','F','H','K','M','P','Q','R','U','V','S','T','X','Y','Z']:
+            if item in ['A', 'B', 'H', 'K', 'P', 'Q', 'V']:
                 continue  # already handled
-            total += sku_count[item] * prices[item]
+            total += count[item] * prices[item]
 
         return total
+
 
