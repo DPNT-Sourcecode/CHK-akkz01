@@ -115,6 +115,19 @@ class CheckoutSolution:
         total += sku_count['C'] * prices['C']
         total += sku_count['D'] * prices['D']
         total += sku_count['E'] * prices['E']
+        total += sku_count['G'] * prices['G']
+        total += sku_count['I'] * prices['I']
+        total += sku_count['J'] * prices['J']
+        total += sku_count['L'] * prices['L']
+        total += sku_count['M'] * prices['M']
+        total += sku_count['O'] * prices['O']
+        total += sku_count['S'] * prices['S']
+        total += sku_count['T'] * prices['T']
+        total += sku_count['W'] * prices['W']
+        total += sku_count['X'] * prices['X']
+        total += sku_count['Y'] * prices['Y']
+        total += sku_count['Z'] * prices['Z']
 
         return total
+
 
