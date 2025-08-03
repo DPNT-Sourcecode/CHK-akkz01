@@ -7,7 +7,7 @@ class CheckoutSolution:
         if not isinstance(skus, str):
             return -1 #Illegal Input 
         
-        valid_skus = set('ABCD')
+        valid_skus = set('ABCDE')
         if any(c not in valid_skus for c in skus):
             return -1
         
@@ -37,14 +37,14 @@ class CheckoutSolution:
             total += sku_count['B'] * prices['B']
 
         if sku_count['E'] >= 2:
-            total += (sku_count['B'])
+            total += sku_count['E'] * prices['E']
+            free_b = min(sku_count['B'], sku_count['E'] // 2)
+            b_to_pay = sku_count['B'] - free_b
+            total += (b_to_pay // 2) * 45 + (b_to_pay % 2) * prices['B']
+        else:
+            total += sku_count['E'] * prices['E']
 
         total += sku_count['C'] * prices['C']
         total += sku_count['D'] * prices['D']   
 
         return total 
-
-
-
-
-
