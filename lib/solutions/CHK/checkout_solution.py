@@ -128,6 +128,3 @@ class CheckoutSolution:
         total += sku_count['Z'] * prices['Z']
 
         return total
-
-
-
