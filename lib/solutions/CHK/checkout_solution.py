@@ -3,19 +3,35 @@ class CheckoutSolution:
 
     # skus = unicode string
     def checkout(self, skus):
-        if skus == "A":
-            return 50 
-        elif skus == "AAA":
-            return 130
-        elif skus == "B":
-            return 30
-        elif skus == "BB":
-            return 45  
-        elif skus == "C":
-            return 20
-        elif skus == "D":
-            return 15
+
+        if not isinstance(skus, str):
+            return -1 #Illegal Input 
+        
+        prices = {
+            'A': 50,
+            'B': 30,
+            'C': 20,
+            'D': 15
+        }
+        total = 0 
+
+        # Count SKUs 
+        from collections import Counter
+
+        sku_count = Counter(skus)
+
+        # Apply this week's discounts 
+        if sku_count['A'] >= 3:
+            total += (sku_count['A'] // 3) * 130 + (sku_count['A'] % 3) * prices['A']
         else:
-            return -1 # Invalid SKU
-            raise NotImplementedError()
+            total += sku_count['A'] * prices['A']
+        
+        if sku_count['B'] >= 2:
+            total += (sku_count['B'] // 2) * 45 + (sku_count['B'] % 2) * prices['B']
+        else:
+            total += sku_count['B'] * prices['B']
+
+        total += sku_count['C'] * prices['C']
+        total += sku_count['D'] * prices['D']   
+
 
