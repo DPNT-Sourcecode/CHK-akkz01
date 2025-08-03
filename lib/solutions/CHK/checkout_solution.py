@@ -3,14 +3,13 @@ class CheckoutSolution:
 
     # skus = unicode string
     def checkout(self, skus):
-
         if not isinstance(skus, str):
-            return -1 #Illegal Input 
-        
+            return -1  # Illegal Input
+
         valid_skus = set('ABCDE')
         if any(c not in valid_skus for c in skus):
             return -1
-        
+
         prices = {
             'A': 50,
             'B': 30,
@@ -18,39 +17,33 @@ class CheckoutSolution:
             'D': 15,
             'E': 40
         }
-        total = 0 
 
-        # Count SKUs 
         from collections import Counter
-
         sku_count = Counter(skus)
+        total = 0
 
-        # Apply this week's discounts 
-        if sku_count['A'] >= 3:
-            total += (sku_count['A'] // 3) * 130 + (sku_count['A'] % 3) * prices['A']
-        elif sku_count['A'] >= 5:
-            total += (sku_count['A'] // 5) * 200 + (sku_count['A'] % 5) * prices['A']
-        else:
-            total += sku_count['A'] * prices['A']
-        
-        if sku_count['B'] >= 2:
-           total += (sku_count['B'] // 2) * 45 + (sku_count['B'] % 2) * prices['B']
-        else:
-           total += sku_count['B'] * prices['B']
+        # Handle A discounts: apply 5-for-200 first, then 3-for-130
+        a_qty = sku_count['A']
+        total += (a_qty // 5) * 200
+        a_qty %= 5
+        total += (a_qty // 3) * 130
+        total += (a_qty % 3) * prices['A']
 
-        # Always add price for E
+        # Apply E free B offer: For every 2 E, get one B free
+        free_b = sku_count['E'] // 2
+        effective_b = max(0, sku_count['B'] - free_b)
+
+        # Apply B discount: 2 for 45
+        total += (effective_b // 2) * 45
+        total += (effective_b % 2) * prices['B']
+
+        # C and D have no offers
+        total += sku_count['C'] * prices['C']
+        total += sku_count['D'] * prices['D']
         total += sku_count['E'] * prices['E']
 
-        # Calculate free B from E
-        free_b = min(sku_count['B'], sku_count['E'] // 2)
-        b_to_pay = sku_count['B'] - free_b
-        total += (b_to_pay // 2) * 45 + (b_to_pay % 2) * prices['B']
+        return total
 
-
-        total += sku_count['C'] * prices['C']
-        total += sku_count['D'] * prices['D']   
-
-        return total 
 
 
 
