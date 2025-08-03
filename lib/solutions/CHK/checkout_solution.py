@@ -31,20 +31,22 @@ class CheckoutSolution:
         else:
             total += sku_count['A'] * prices['A']
         
-        if sku_count['B'] >= 2:
-            total += (sku_count['B'] // 2) * 45 + (sku_count['B'] % 2) * prices['B']
-        else:
-            total += sku_count['B'] * prices['B']
+        #if sku_count['B'] >= 2:
+         #   total += (sku_count['B'] // 2) * 45 + (sku_count['B'] % 2) * prices['B']
+        #else:
+         #   total += sku_count['B'] * prices['B']
 
-        if sku_count['E'] >= 2:
-            total += sku_count['E'] * prices['E']
-            free_b = min(sku_count['B'], sku_count['E'] // 2)
-            b_to_pay = sku_count['B'] - free_b
-            total += (b_to_pay // 2) * 45 + (b_to_pay % 2) * prices['B']
-        else:
-            total += sku_count['E'] * prices['E']
+        # Always add price for E
+        total += sku_count['E'] * prices['E']
+
+        # Calculate free B from E
+        free_b = min(sku_count['B'], sku_count['E'] // 2)
+        b_to_pay = sku_count['B'] - free_b
+        total += (b_to_pay // 2) * 45 + (b_to_pay % 2) * prices['B']
+
 
         total += sku_count['C'] * prices['C']
         total += sku_count['D'] * prices['D']   
 
         return total 
+
