@@ -67,7 +67,7 @@ class CheckoutSolution:
         # Handle H discounts: apply 5-for-200 first, then 3-for-130
         h_qty = sku_count['H']
         total += (h_qty // 10) * 80
-        a_qty %= 5
+        h_qty %= 5
         total += (h_qty // 5) * 45
         total += (h_qty % 5) * prices['H']
 
@@ -76,11 +76,11 @@ class CheckoutSolution:
         total += (k_qty // 2) * 150
         total += (k_qty % 2) * prices['K']
 
-        # Hande M discounts
-        m_qty = sku_count['M']
-        free_m = m_qty // 4
-        paid_m = m_qty - free_m
-        total += paid_m * prices['M']
+        # Hande N discounts
+        n_qty = sku_count['N']
+        free_n = n_qty // 4
+        paid_n = n_qty - free_n
+        total += paid_n * prices['N']
 
         # Handle P discounts
         p_qty = sku_count['P']
@@ -93,10 +93,8 @@ class CheckoutSolution:
         total += (q_qty % 3) * prices['Q']
 
         # Handle R discounts
-        r_qty = sku_count['R']
-        free_r = r_qty // 4
-        paid_r = r_qty - free_r
-        total += paid_r * prices['R']
+        free_q = sku_count['R'] // 3
+        effective_q = max(0, sku_count['Q'] - free_q)
 
         # Handle U discounts
         u_qty = sku_count['U']
@@ -105,11 +103,11 @@ class CheckoutSolution:
         total += paid_u * prices['U']
 
         # Handle V discounts
-        u_qty = sku_count['U']
-        total += (u_qty // 3) * 130
-        u_qty %= 2
-        total += (u_qty // 2) * 90
-        total += (u_qty % 2) * prices['H']
+        v_qty = sku_count['V']
+        total += (v_qty // 3) * 130
+        v_qty %= 2
+        total += (v_qty // 2) * 90
+        total += (v_qty % 2) * prices['V']
 
         # C and D have no offers
         total += sku_count['C'] * prices['C']
@@ -117,4 +115,5 @@ class CheckoutSolution:
         total += sku_count['E'] * prices['E']
 
         return total
+
 
